@@ -331,6 +331,7 @@ export const makePlugin = async (
     const cookies: { [link: string]: { [key: string]: string } } = {};
     for (const link of config.cookies) {
       const cache = await getCookiesByHost(link);
+      console.log("fetching cookies for", link, cache)
       cookies[link] = cache;
     }
     // @ts-ignore
@@ -341,6 +342,7 @@ export const makePlugin = async (
     const headers: { [link: string]: { [key: string]: string } } = {};
     for (const link of config.headers) {
       const cache = await getHeadersByHost(link);
+      console.log("fetching headers for", link, cache)
       headers[link] = cache;
     }
     // @ts-ignore

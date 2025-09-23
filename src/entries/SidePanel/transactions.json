@@ -1,0 +1,1395 @@
+[
+    {
+        "id": "68be9ca1-a7a0-a6ba-b89b-7d02a8789c56",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "68be9ca1-a7a0-a6ba-0000-7d02a8789c56",
+        "groupKey": "04e85c92-7577-e31d-00c0-149cc1187c9a",
+        "type": "TRANSFER",
+        "state": "COMPLETED",
+        "startedDate": 1757322401623,
+        "updatedDate": 1757322401955,
+        "completedDate": 1757322401948,
+        "createdDate": 1757322401879,
+        "currency": "EUR",
+        "amount": 100,
+        "amountWithCharges": 100,
+        "fee": 0,
+        "balance": 3686,
+        "description": "From Malek M",
+        "comment": "",
+        "tag": "transfers",
+        "category": "transfers",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "rate": 1,
+        "transferLinkId": "071ec16d-5ac7-e2d3-00c0-14e4fdd15c5b",
+        "beneficiary": {},
+        "sender": {
+            "id": "92b73683-ee8b-e231-00c0-147489be89eb",
+            "type": "INDIVIDUAL",
+            "individualType": "PERSONAL",
+            "firstName": "Malek",
+            "lastName": "Malyen",
+            "country": "FR",
+            "code": "malyen",
+            "username": "malyen"
+        },
+        "localisedDescription": {
+            "key": "transaction.description.generic.name",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "Malek M"
+                }
+            ]
+        }
+    },
+    {
+        "id": "68be9bf1-39d7-abd2-81c8-d4e579c70f7a",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "68be9bf1-39d7-abd2-0000-d4e579c70f7a",
+        "groupKey": "68be9bf1-39d7-abd2-81c8-d4e579c70f7a",
+        "type": "TRANSFER",
+        "state": "COMPLETED",
+        "startedDate": 1757322225958,
+        "updatedDate": 1757322226247,
+        "completedDate": 1757322226245,
+        "createdDate": 1757322225958,
+        "currency": "EUR",
+        "amount": -100,
+        "amountWithCharges": -100,
+        "fee": 0,
+        "balance": 3586,
+        "description": "To MALEK MALYEN",
+        "comment": "",
+        "tag": "transfers",
+        "category": "transfers",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "splittable": true,
+        "rate": 1,
+        "transferLinkId": "9e5e07a6-a966-4f27-a082-4fe1428db2e0",
+        "beneficiary": {},
+        "recipient": {
+            "id": "92b73683-ee8b-e231-00c0-147489be89eb",
+            "type": "INDIVIDUAL",
+            "individualType": "PERSONAL",
+            "firstName": "Malek",
+            "lastName": "Malyen",
+            "country": "FR",
+            "code": "malyen",
+            "username": "malyen",
+            "account": {
+                "id": "db5c5ced-9cfb-e248-00c0-145ed6b24256",
+                "type": "CURRENT"
+            }
+        },
+        "localisedDescription": {
+            "key": "transaction.description.generic.name",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "Malek M"
+                }
+            ]
+        }
+    },
+    {
+        "id": "68be9bd1-1c5b-a7e1-8419-3b54b313cd69",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "68be9bd1-1c5b-a7e1-0000-3b54b313cd69",
+        "groupKey": "68be9bd1-1c5b-a7e1-8419-3b54b313cd69",
+        "type": "TRANSFER",
+        "state": "DELETED",
+        "startedDate": 1757322193088,
+        "updatedDate": 1757322225900,
+        "createdDate": 1757322193088,
+        "currency": "EUR",
+        "amount": -100,
+        "amountWithCharges": -100,
+        "fee": 0,
+        "comment": "",
+        "tag": "transfers",
+        "category": "transfers",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "rate": 1,
+        "transferLinkId": "9e5e07a6-a966-4f27-a082-4fe1428db2e0",
+        "beneficiary": {},
+        "localisedDescription": {
+            "key": "transaction.description.transfer.via.transfer.link",
+            "params": []
+        }
+    },
+    {
+        "id": "68ba8327-bef1-acfb-b3be-2c9836661c24",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "68ba8327-bef1-acfb-0000-2c9836661c24",
+        "groupKey": "68ba8327-bef1-acfb-b3be-2c9836661c24",
+        "type": "CARD_PAYMENT",
+        "state": "COMPLETED",
+        "startedDate": 1757053726000,
+        "updatedDate": 1757295757393,
+        "completedDate": 1757295757392,
+        "createdDate": 1757053735539,
+        "currency": "EUR",
+        "amount": -240,
+        "amountWithCharges": -240,
+        "fee": 0,
+        "feeBreakdownId": "TXN:68ba8327-bef1-acfb-b3be-2c9836661c24",
+        "balance": 3686,
+        "description": "Pistache Et Choc",
+        "tag": "groceries",
+        "category": "groceries",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "countryCode": "FR",
+        "splittable": true,
+        "rate": 1,
+        "merchant": {
+            "id": "970071005739494",
+            "merchantId": "43358b3b-8309-485a-964a-846c200363e3",
+            "scheme": "MASTERCARD",
+            "name": "Pistachio and Chocolate",
+            "mcc": "5462",
+            "category": "groceries",
+            "city": "Montpellier",
+            "country": "FR",
+            "address": "Rue Proudhon, 9, 34000, Montpellier, FR",
+            "state": "FR",
+            "postcode": "34000",
+            "canBeBlocked": true
+        },
+        "counterpart": {
+            "amount": -240,
+            "currency": "EUR"
+        },
+        "card": {
+            "id": "5942ebeb-1dfb-42e4-a65c-1d10542073a1",
+            "lastFour": "6458",
+            "label": "Carte Londre",
+            "disposable": false,
+            "credit": false,
+            "pro": false
+        },
+        "digitizedCard": {
+            "id": "64fb0795-c6e1-4f41-a864-3c4d723ab050"
+        },
+        "ratings": {
+            "userRating": 0
+        },
+        "cardholderPresent": true,
+        "chargebackEligible": true,
+        "localisedDescription": {
+            "key": "transaction.description.card.payment.to.merchant",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "Pistachio and Chocolate"
+                }
+            ]
+        }
+    },
+    {
+        "id": "68b94eb2-afce-ae25-b17a-d29e3c09f961",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "68b94eb2-afce-ae25-0000-d29e3c09f961",
+        "groupKey": "68b94eb2-afce-ae25-b17a-d29e3c09f961",
+        "type": "TRANSFER",
+        "state": "COMPLETED",
+        "startedDate": 1756974770715,
+        "updatedDate": 1756974771155,
+        "completedDate": 1756974771153,
+        "createdDate": 1756974770715,
+        "currency": "EUR",
+        "amount": -1250,
+        "amountWithCharges": -1250,
+        "fee": 0,
+        "balance": 3926,
+        "description": "To Timothée T",
+        "comment": "J'ai hâte ",
+        "tag": "transfers",
+        "category": "transfers",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "splittable": true,
+        "rate": 1,
+        "recipient": {
+            "id": "0f9bf078-81c5-e2ad-00c0-261903196f44",
+            "type": "INDIVIDUAL",
+            "individualType": "PERSONAL",
+            "firstName": "Timothée",
+            "lastName": "Tollet",
+            "country": "FR",
+            "code": "ttollet",
+            "username": "ttollet",
+            "account": {
+                "id": "7ad0e0be-f9b8-e21d-00c0-269cd39a1c88",
+                "type": "CURRENT"
+            }
+        },
+        "localisedDescription": {
+            "key": "transaction.description.generic.name",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "Timothée T"
+                }
+            ]
+        }
+    },
+    {
+        "id": "68aae923-cc7a-a68f-8161-67321100eedc",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "68aae923-cc7a-a68f-0000-67321100eedc",
+        "groupKey": "68aae923-cc7a-a68f-8161-67321100eedc",
+        "type": "TRANSFER",
+        "state": "COMPLETED",
+        "startedDate": 1756031267474,
+        "updatedDate": 1756031268238,
+        "completedDate": 1756031268237,
+        "createdDate": 1756031267474,
+        "currency": "EUR",
+        "amount": -7500,
+        "amountWithCharges": -7500,
+        "fee": 0,
+        "balance": 5176,
+        "description": "To Timothée T",
+        "comment": "J'ai hâte ",
+        "tag": "transfers",
+        "category": "transfers",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "splittable": true,
+        "rate": 1,
+        "recipient": {
+            "id": "0f9bf078-81c5-e2ad-00c0-261903196f44",
+            "type": "INDIVIDUAL",
+            "individualType": "PERSONAL",
+            "firstName": "Timothée",
+            "lastName": "Tollet",
+            "country": "FR",
+            "code": "ttollet",
+            "username": "ttollet",
+            "account": {
+                "id": "7ad0e0be-f9b8-e21d-00c0-269cd39a1c88",
+                "type": "CURRENT"
+            }
+        },
+        "localisedDescription": {
+            "key": "transaction.description.generic.name",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "Timothée T"
+                }
+            ]
+        }
+    },
+    {
+        "id": "68aae8e3-a34f-a6b9-abdb-f32aab5cc56e",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "68aae8e3-a34f-a6b9-0000-f32aab5cc56e",
+        "groupKey": "68aae8e3-a34f-a6b9-abdb-f32aab5cc56e",
+        "type": "TOPUP",
+        "state": "COMPLETED",
+        "startedDate": 1756031203369,
+        "updatedDate": 1756031235897,
+        "completedDate": 1756031235883,
+        "createdDate": 1756031203369,
+        "currency": "EUR",
+        "amount": 10000,
+        "amountWithCharges": 10000,
+        "fee": 0,
+        "balance": 12676,
+        "description": "Top-Up by *3622",
+        "tag": "topup",
+        "category": "topup",
+        "logo": "https://assets.revolut.com/assets/banks/visa@3x.png",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "topupMethod": "EXTERNAL_CARD",
+        "topupSource": "UNSPECIFIED",
+        "card": {
+            "id": "d93870b6-8771-4898-9eea-fc79a6c38724",
+            "lastFour": "3622",
+            "brand": "VISA",
+            "currency": "EUR"
+        },
+        "localisedDescription": {
+            "key": "transaction.description.top.up.from.card",
+            "params": [
+                {
+                    "key": "lastFour",
+                    "value": "3622"
+                }
+            ]
+        }
+    },
+    {
+        "id": "687145c6-4577-afdc-9767-d3f2b7f7e25b",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "687145c6-4577-afdc-0000-d3f2b7f7e25b",
+        "groupKey": "687145c6-4577-afdc-9767-d3f2b7f7e25b",
+        "type": "CARD_PAYMENT",
+        "state": "COMPLETED",
+        "startedDate": 1752253888000,
+        "updatedDate": 1752330168139,
+        "completedDate": 1752330168137,
+        "createdDate": 1752253894031,
+        "currency": "EUR",
+        "amount": -521,
+        "amountWithCharges": -521,
+        "fee": 0,
+        "feeBreakdownId": "TXN:687145c6-4577-afdc-9767-d3f2b7f7e25b",
+        "balance": 2676,
+        "description": "? Pain D?licieux",
+        "tag": "groceries",
+        "category": "groceries",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "countryCode": "FR",
+        "splittable": true,
+        "rate": 1,
+        "merchant": {
+            "id": "05518065",
+            "merchantId": "33730ad7-5679-4f04-a524-8f7ee4880250",
+            "scheme": "MASTERCARD",
+            "name": "Ô Pain Délicieux",
+            "mcc": "5462",
+            "category": "groceries",
+            "city": "Montpellier",
+            "country": "FR",
+            "address": "18 Rue Bernard Delicieux, 34000, Montpellier, FR",
+            "state": "FR",
+            "postcode": "34000",
+            "canBeBlocked": true
+        },
+        "counterpart": {
+            "amount": -521,
+            "currency": "EUR"
+        },
+        "card": {
+            "id": "5942ebeb-1dfb-42e4-a65c-1d10542073a1",
+            "lastFour": "6458",
+            "label": "Carte Londre",
+            "disposable": false,
+            "credit": false,
+            "pro": false
+        },
+        "digitizedCard": {
+            "id": "64fb0795-c6e1-4f41-a864-3c4d723ab050"
+        },
+        "ratings": {
+            "userRating": 0
+        },
+        "cardholderPresent": true,
+        "chargebackEligible": true,
+        "localisedDescription": {
+            "key": "transaction.description.card.payment.to.merchant",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "Ô Pain Délicieux"
+                }
+            ]
+        }
+    },
+    {
+        "id": "686e45e8-a5c9-ab79-9123-52d516c78f63",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "686e45e8-a5c9-ab79-0000-52d516c78f63",
+        "groupKey": "686e45e8-a5c9-ab79-9123-52d516c78f63",
+        "type": "CARD_PAYMENT",
+        "state": "COMPLETED",
+        "startedDate": 1752057314000,
+        "updatedDate": 1752145843977,
+        "completedDate": 1752145843974,
+        "createdDate": 1752057320812,
+        "currency": "EUR",
+        "amount": -427,
+        "amountWithCharges": -427,
+        "fee": 0,
+        "feeBreakdownId": "TXN:686e45e8-a5c9-ab79-9123-52d516c78f63",
+        "balance": 3197,
+        "description": "? Pain D?licieux",
+        "tag": "groceries",
+        "category": "groceries",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "countryCode": "FR",
+        "splittable": true,
+        "rate": 1,
+        "merchant": {
+            "id": "05518065",
+            "merchantId": "33730ad7-5679-4f04-a524-8f7ee4880250",
+            "scheme": "MASTERCARD",
+            "name": "Ô Pain Délicieux",
+            "mcc": "5462",
+            "category": "groceries",
+            "city": "Montpellier",
+            "country": "FR",
+            "address": "18 Rue Bernard Delicieux, 34000, Montpellier, FR",
+            "state": "FR",
+            "postcode": "34000",
+            "canBeBlocked": true
+        },
+        "counterpart": {
+            "amount": -427,
+            "currency": "EUR"
+        },
+        "card": {
+            "id": "5942ebeb-1dfb-42e4-a65c-1d10542073a1",
+            "lastFour": "6458",
+            "label": "Carte Londre",
+            "disposable": false,
+            "credit": false,
+            "pro": false
+        },
+        "digitizedCard": {
+            "id": "64fb0795-c6e1-4f41-a864-3c4d723ab050"
+        },
+        "ratings": {
+            "userRating": 0
+        },
+        "cardholderPresent": true,
+        "chargebackEligible": true,
+        "localisedDescription": {
+            "key": "transaction.description.card.payment.to.merchant",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "Ô Pain Délicieux"
+                }
+            ]
+        }
+    },
+    {
+        "id": "686c37f7-5ea9-a38d-ac4b-7c27cf40feeb",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "686c37f7-5ea9-a38d-0000-7c27cf40feeb",
+        "groupKey": "686c37f7-5ea9-a38d-ac4b-7c27cf40feeb",
+        "type": "TRANSFER",
+        "state": "COMPLETED",
+        "startedDate": 1751922679752,
+        "updatedDate": 1751922680076,
+        "completedDate": 1751922680074,
+        "createdDate": 1751922679752,
+        "currency": "EUR",
+        "amount": -6300,
+        "amountWithCharges": -6300,
+        "fee": 0,
+        "balance": 3624,
+        "description": "To STEFAN TANCREDE C",
+        "comment": "Paiement le monde",
+        "tag": "transfers",
+        "category": "transfers",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "splittable": true,
+        "rate": 1,
+        "recipient": {
+            "id": "f775bb86-7f8f-4351-8e62-99b07e1466b2",
+            "type": "INDIVIDUAL",
+            "individualType": "PERSONAL",
+            "firstName": "STEFAN TANCREDE",
+            "lastName": "CUSSAC",
+            "country": "GB",
+            "code": "stefane0j",
+            "phone": "+33687273724",
+            "username": "stefane0j",
+            "account": {
+                "id": "d02e5404-26ac-4132-af4c-bf5954015e1d",
+                "type": "CURRENT"
+            }
+        },
+        "localisedDescription": {
+            "key": "transaction.description.generic.name",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "STEFAN TANCREDE C"
+                }
+            ]
+        }
+    },
+    {
+        "id": "686c3764-a308-af5b-ac63-14508ab7aafb",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "686c3764-a308-af5b-0000-14508ab7aafb",
+        "groupKey": "686c3764-a308-af5b-ac63-14508ab7aafb",
+        "type": "EXCHANGE",
+        "state": "COMPLETED",
+        "startedDate": 1751922532367,
+        "updatedDate": 1751922532367,
+        "completedDate": 1751922532367,
+        "createdDate": 1751922532367,
+        "currency": "CHF",
+        "amount": -3801,
+        "amountWithCharges": -3801,
+        "fee": 0,
+        "feeBreakdownId": "TXN:686c3764-a308-af5b-ac63-14508ab7aafb",
+        "balance": 0,
+        "description": "Exchanged to EUR",
+        "tag": "general",
+        "category": "general",
+        "account": {
+            "id": "09a0f0c2-ac8a-4d40-babd-3627ce35d73c",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "fromAccount": {
+            "type": "PERSONAL",
+            "pocketId": "09a0f0c2-ac8a-4d40-babd-3627ce35d73c"
+        },
+        "toAccount": {
+            "type": "PERSONAL",
+            "pocketId": "f986689c-c6de-4eed-9119-5d960563e32a"
+        },
+        "rate": 1.0669804903360251,
+        "direction": "sell",
+        "counterpart": {
+            "amount": 4055,
+            "currency": "EUR",
+            "account": {
+                "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+                "type": "CURRENT"
+            }
+        },
+        "localisedDescription": {
+            "key": "transaction.description.arrow.custom.custom",
+            "params": [
+                {
+                    "key": "arrowSource",
+                    "value": "CHF"
+                },
+                {
+                    "key": "arrowTarget",
+                    "value": "EUR"
+                }
+            ]
+        }
+    },
+    {
+        "id": "686c3764-a308-af5b-ac63-14508ab7aafb",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "686c3764-a308-af5b-0001-14508ab7aafb",
+        "groupKey": "686c3764-a308-af5b-ac63-14508ab7aafb",
+        "type": "EXCHANGE",
+        "state": "COMPLETED",
+        "startedDate": 1751922532367,
+        "updatedDate": 1751922532367,
+        "completedDate": 1751922532367,
+        "createdDate": 1751922532367,
+        "currency": "EUR",
+        "amount": 4055,
+        "amountWithCharges": 4055,
+        "fee": 0,
+        "feeBreakdownId": "TXN:686c3764-a308-af5b-ac63-14508ab7aafb",
+        "balance": 9924,
+        "description": "Exchanged from CHF",
+        "tag": "general",
+        "category": "general",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "fromAccount": {
+            "type": "PERSONAL",
+            "pocketId": "09a0f0c2-ac8a-4d40-babd-3627ce35d73c"
+        },
+        "toAccount": {
+            "type": "PERSONAL",
+            "pocketId": "f986689c-c6de-4eed-9119-5d960563e32a"
+        },
+        "rate": 0.9372242595411179,
+        "direction": "buy",
+        "counterpart": {
+            "amount": -3801,
+            "currency": "CHF",
+            "account": {
+                "id": "09a0f0c2-ac8a-4d40-babd-3627ce35d73c",
+                "type": "CURRENT"
+            }
+        },
+        "localisedDescription": {
+            "key": "transaction.description.arrow.custom.custom",
+            "params": [
+                {
+                    "key": "arrowSource",
+                    "value": "CHF"
+                },
+                {
+                    "key": "arrowTarget",
+                    "value": "EUR"
+                }
+            ]
+        }
+    },
+    {
+        "id": "686a5161-70e5-a1ba-9e14-939d241dc7a6",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "686a5161-70e5-a1ba-0000-939d241dc7a6",
+        "groupKey": "686a5161-70e5-a1ba-9e14-939d241dc7a6",
+        "type": "CARD_PAYMENT",
+        "state": "COMPLETED",
+        "startedDate": 1751798112000,
+        "updatedDate": 1751863502318,
+        "completedDate": 1751863502315,
+        "createdDate": 1751798113711,
+        "currency": "EUR",
+        "amount": -1330,
+        "amountWithCharges": -1330,
+        "fee": 0,
+        "feeBreakdownId": "TXN:686a5161-70e5-a1ba-9e14-939d241dc7a6",
+        "balance": 5869,
+        "description": "Ile Verte",
+        "tag": "groceries",
+        "category": "groceries",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "countryCode": "FR",
+        "splittable": true,
+        "rate": 1,
+        "merchant": {
+            "id": "08849392",
+            "merchantId": "5498810a-0a29-4faf-a1a7-45a5f4f4920c",
+            "scheme": "MASTERCARD",
+            "name": "Île Verte",
+            "mcc": "5462",
+            "category": "groceries",
+            "city": "Grenoble",
+            "country": "FR",
+            "address": "38000, Grenoble, FR",
+            "state": "FR",
+            "postcode": "38000",
+            "canBeBlocked": true
+        },
+        "counterpart": {
+            "amount": -1330,
+            "currency": "EUR"
+        },
+        "card": {
+            "id": "5942ebeb-1dfb-42e4-a65c-1d10542073a1",
+            "lastFour": "6458",
+            "label": "Carte Londre",
+            "disposable": false,
+            "credit": false,
+            "pro": false
+        },
+        "digitizedCard": {
+            "id": "64fb0795-c6e1-4f41-a864-3c4d723ab050"
+        },
+        "ratings": {
+            "userRating": 0
+        },
+        "cardholderPresent": true,
+        "chargebackEligible": true,
+        "localisedDescription": {
+            "key": "transaction.description.card.payment.to.merchant",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "Île Verte"
+                }
+            ]
+        }
+    },
+    {
+        "id": "68641692-17ed-a968-bb5e-255fe8804f37",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "68641692-17ed-a968-0000-255fe8804f37",
+        "groupKey": "68641692-17ed-a968-bb5e-255fe8804f37",
+        "type": "CARD_PAYMENT",
+        "state": "COMPLETED",
+        "startedDate": 1751389836000,
+        "updatedDate": 1751432859159,
+        "completedDate": 1751432859156,
+        "createdDate": 1751389842419,
+        "currency": "EUR",
+        "amount": -2020,
+        "amountWithCharges": -2020,
+        "fee": 0,
+        "feeBreakdownId": "TXN:68641692-17ed-a968-bb5e-255fe8804f37",
+        "balance": 7199,
+        "description": "Epic Valgaudemar",
+        "tag": "groceries",
+        "category": "groceries",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "countryCode": "FR",
+        "splittable": true,
+        "rate": 1,
+        "merchant": {
+            "id": "970061009671704",
+            "merchantId": "d9aeae36-f559-4ee5-aa7b-6b561322334f",
+            "scheme": "MASTERCARD",
+            "name": "Epic Valgaudemar",
+            "mcc": "5411",
+            "category": "groceries",
+            "city": "La Chapelle E",
+            "country": "FR",
+            "address": "Pont De La Place, 05800, La Chapelle E, FR",
+            "state": "FR",
+            "postcode": "05800",
+            "canBeBlocked": true
+        },
+        "counterpart": {
+            "amount": -2020,
+            "currency": "EUR"
+        },
+        "card": {
+            "id": "5942ebeb-1dfb-42e4-a65c-1d10542073a1",
+            "lastFour": "6458",
+            "label": "Carte Londre",
+            "disposable": false,
+            "credit": false,
+            "pro": false
+        },
+        "digitizedCard": {
+            "id": "64fb0795-c6e1-4f41-a864-3c4d723ab050"
+        },
+        "ratings": {
+            "userRating": 0
+        },
+        "cardholderPresent": true,
+        "chargebackEligible": true,
+        "localisedDescription": {
+            "key": "transaction.description.card.payment.to.merchant",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "Epic Valgaudemar"
+                }
+            ]
+        }
+    },
+    {
+        "id": "683cdcb1-5ab1-a66d-a99b-3bd7c366e2bb",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "683cdcb1-5ab1-a66d-0000-3bd7c366e2bb",
+        "groupKey": "683cdcb1-5ab1-a66d-a99b-3bd7c366e2bb",
+        "type": "CARD_PAYMENT",
+        "state": "COMPLETED",
+        "startedDate": 1748819121000,
+        "updatedDate": 1748839039297,
+        "completedDate": 1748839039295,
+        "createdDate": 1748819121698,
+        "currency": "EUR",
+        "amount": -2030,
+        "amountWithCharges": -2030,
+        "fee": 0,
+        "feeBreakdownId": "TXN:683cdcb1-5ab1-a66d-a99b-3bd7c366e2bb",
+        "balance": 9219,
+        "description": "Bolt.euo2506012305",
+        "tag": "transport",
+        "category": "transport",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "countryCode": "EE",
+        "splittable": true,
+        "rate": 1,
+        "merchant": {
+            "id": "000000000210966",
+            "merchantId": "aeb33e2d-faa1-4ac4-89fa-0e7eba020927",
+            "scheme": "MASTERCARD",
+            "name": "Bolt",
+            "mcc": "4121",
+            "category": "transport",
+            "city": "Tallinn",
+            "country": "EE",
+            "address": "Tallinn, EE",
+            "state": "EE",
+            "logo": "https://storage.googleapis.com/revolut-prod-apps_merchant-logo/bolt.eu",
+            "brandId": "852342cb-113c-4223-8b8e-be600097bf9d",
+            "canBeBlocked": true
+        },
+        "counterpart": {
+            "amount": -2030,
+            "currency": "EUR"
+        },
+        "card": {
+            "id": "5942ebeb-1dfb-42e4-a65c-1d10542073a1",
+            "lastFour": "6458",
+            "label": "Carte Londre",
+            "disposable": false,
+            "credit": false,
+            "pro": false
+        },
+        "digitizedCard": {
+            "id": "64fb0795-c6e1-4f41-a864-3c4d723ab050"
+        },
+        "ratings": {
+            "userRating": 0
+        },
+        "eCommerce": true,
+        "cardholderPresent": false,
+        "chargebackEligible": true,
+        "localisedDescription": {
+            "key": "transaction.description.card.payment.to.merchant",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "Bolt"
+                }
+            ]
+        }
+    },
+    {
+        "id": "680fbac6-6e13-a2c9-8f2b-2b7887b243a0",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "680fbac6-6e13-a2c9-0000-2b7887b243a0",
+        "groupKey": "680fbac6-6e13-a2c9-8f2b-2b7887b243a0",
+        "type": "CARD_PAYMENT",
+        "state": "COMPLETED",
+        "startedDate": 1745861311000,
+        "updatedDate": 1745931036093,
+        "completedDate": 1745931036091,
+        "createdDate": 1745861318176,
+        "currency": "EUR",
+        "amount": -850,
+        "amountWithCharges": -850,
+        "fee": 0,
+        "feeBreakdownId": "TXN:680fbac6-6e13-a2c9-8f2b-2b7887b243a0",
+        "balance": 11249,
+        "description": "? Pain D?licieux",
+        "tag": "groceries",
+        "category": "groceries",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "countryCode": "FR",
+        "splittable": true,
+        "rate": 1,
+        "merchant": {
+            "id": "05518065",
+            "merchantId": "33730ad7-5679-4f04-a524-8f7ee4880250",
+            "scheme": "MASTERCARD",
+            "name": "Ô Pain Délicieux",
+            "mcc": "5462",
+            "category": "groceries",
+            "city": "Montpellier",
+            "country": "FR",
+            "address": "18 Rue Bernard Delicieux, 34000, Montpellier, FR",
+            "state": "FR",
+            "postcode": "34000",
+            "canBeBlocked": true
+        },
+        "counterpart": {
+            "amount": -850,
+            "currency": "EUR"
+        },
+        "card": {
+            "id": "5942ebeb-1dfb-42e4-a65c-1d10542073a1",
+            "lastFour": "6458",
+            "label": "Carte Londre",
+            "disposable": false,
+            "credit": false,
+            "pro": false
+        },
+        "digitizedCard": {
+            "id": "64fb0795-c6e1-4f41-a864-3c4d723ab050"
+        },
+        "ratings": {
+            "userRating": 0
+        },
+        "cardholderPresent": true,
+        "chargebackEligible": true,
+        "localisedDescription": {
+            "key": "transaction.description.card.payment.to.merchant",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "Ô Pain Délicieux"
+                }
+            ]
+        }
+    },
+    {
+        "id": "68035457-b4c7-a281-bbf4-97aec6609648",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "68035457-b4c7-a281-0000-97aec6609648",
+        "groupKey": "68035457-b4c7-a281-bbf4-97aec6609648",
+        "type": "EXCHANGE",
+        "state": "COMPLETED",
+        "startedDate": 1745048663053,
+        "updatedDate": 1745048663053,
+        "completedDate": 1745048663054,
+        "createdDate": 1745048663053,
+        "currency": "EUR",
+        "amount": -5000,
+        "amountWithCharges": -5000,
+        "fee": 0,
+        "feeBreakdownId": "TXN:68035457-b4c7-a281-bbf4-97aec6609648",
+        "charges": {
+            "fees": {
+                "total": {
+                    "amount": 46,
+                    "currency": "CHF"
+                },
+                "breakdown": [
+                    {
+                        "type": "exchange.weekend",
+                        "value": {
+                            "amount": 46,
+                            "currency": "CHF"
+                        }
+                    }
+                ]
+            }
+        },
+        "balance": 12099,
+        "description": "Exchanged to CHF",
+        "tag": "general",
+        "category": "general",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "fromAccount": {
+            "type": "PERSONAL",
+            "pocketId": "f986689c-c6de-4eed-9119-5d960563e32a"
+        },
+        "toAccount": {
+            "type": "PERSONAL",
+            "pocketId": "09a0f0c2-ac8a-4d40-babd-3627ce35d73c"
+        },
+        "rate": 0.926113755918846,
+        "direction": "sell",
+        "counterpart": {
+            "amount": 4584,
+            "currency": "CHF",
+            "account": {
+                "id": "09a0f0c2-ac8a-4d40-babd-3627ce35d73c",
+                "type": "CURRENT"
+            }
+        },
+        "localisedDescription": {
+            "key": "transaction.description.arrow.custom.custom",
+            "params": [
+                {
+                    "key": "arrowSource",
+                    "value": "EUR"
+                },
+                {
+                    "key": "arrowTarget",
+                    "value": "CHF"
+                }
+            ]
+        }
+    },
+    {
+        "id": "68035457-b4c7-a281-bbf4-97aec6609648",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "68035457-b4c7-a281-0001-97aec6609648",
+        "groupKey": "68035457-b4c7-a281-bbf4-97aec6609648",
+        "type": "EXCHANGE",
+        "state": "COMPLETED",
+        "startedDate": 1745048663053,
+        "updatedDate": 1745048663053,
+        "completedDate": 1745048663054,
+        "createdDate": 1745048663053,
+        "currency": "CHF",
+        "amount": 4630,
+        "amountWithCharges": 4584,
+        "fee": 46,
+        "feeBreakdownId": "TXN:68035457-b4c7-a281-bbf4-97aec6609648",
+        "charges": {
+            "fees": {
+                "total": {
+                    "amount": 46,
+                    "currency": "CHF"
+                },
+                "breakdown": [
+                    {
+                        "type": "exchange.weekend",
+                        "value": {
+                            "amount": 46,
+                            "currency": "CHF"
+                        }
+                    }
+                ]
+            }
+        },
+        "balance": 4721,
+        "description": "Exchanged from EUR",
+        "tag": "general",
+        "category": "general",
+        "account": {
+            "id": "09a0f0c2-ac8a-4d40-babd-3627ce35d73c",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "fromAccount": {
+            "type": "PERSONAL",
+            "pocketId": "f986689c-c6de-4eed-9119-5d960563e32a"
+        },
+        "toAccount": {
+            "type": "PERSONAL",
+            "pocketId": "09a0f0c2-ac8a-4d40-babd-3627ce35d73c"
+        },
+        "rate": 1.079780959530018,
+        "direction": "buy",
+        "counterpart": {
+            "amount": -5000,
+            "currency": "EUR",
+            "account": {
+                "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+                "type": "CURRENT"
+            }
+        },
+        "localisedDescription": {
+            "key": "transaction.description.arrow.custom.custom",
+            "params": [
+                {
+                    "key": "arrowSource",
+                    "value": "EUR"
+                },
+                {
+                    "key": "arrowTarget",
+                    "value": "CHF"
+                }
+            ]
+        }
+    },
+    {
+        "id": "68035417-75cd-aa10-a4e6-3dfbfa4972da",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "68035417-75cd-aa10-0000-3dfbfa4972da",
+        "groupKey": "68035417-75cd-aa10-a4e6-3dfbfa4972da",
+        "type": "TOPUP",
+        "state": "COMPLETED",
+        "startedDate": 1745048599223,
+        "updatedDate": 1745048634180,
+        "completedDate": 1745048634172,
+        "createdDate": 1745048599223,
+        "currency": "EUR",
+        "amount": 15000,
+        "amountWithCharges": 15000,
+        "fee": 0,
+        "balance": 17099,
+        "description": "Top-Up by *3622",
+        "tag": "topup",
+        "category": "topup",
+        "logo": "https://assets.revolut.com/assets/banks/visa@3x.png",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "topupMethod": "EXTERNAL_CARD",
+        "topupSource": "UNSPECIFIED",
+        "card": {
+            "id": "d93870b6-8771-4898-9eea-fc79a6c38724",
+            "lastFour": "3622",
+            "brand": "VISA",
+            "currency": "EUR"
+        },
+        "localisedDescription": {
+            "key": "transaction.description.top.up.from.card",
+            "params": [
+                {
+                    "key": "lastFour",
+                    "value": "3622"
+                }
+            ]
+        }
+    },
+    {
+        "id": "67d2c7d2-134f-a632-833a-d7e16aea2dd4",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "67d2c7d2-134f-a632-0000-d7e16aea2dd4",
+        "groupKey": "67d2c7d2-134f-a632-833a-d7e16aea2dd4",
+        "type": "CARD_PAYMENT",
+        "state": "COMPLETED",
+        "startedDate": 1741866962000,
+        "updatedDate": 1741949302120,
+        "completedDate": 1741949302118,
+        "createdDate": 1741866962791,
+        "currency": "EUR",
+        "amount": -8300,
+        "amountWithCharges": -8300,
+        "fee": 0,
+        "feeBreakdownId": "TXN:67d2c7d2-134f-a632-833a-d7e16aea2dd4",
+        "balance": 2099,
+        "description": "Sncf-Voyageurs",
+        "tag": "travel",
+        "category": "travel",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "countryCode": "FR",
+        "splittable": true,
+        "rate": 1,
+        "merchant": {
+            "id": "0500664",
+            "merchantId": "7800a25e-8c5b-4f2c-94e0-fe83b23b78a8",
+            "scheme": "VISA",
+            "name": "SNCF",
+            "mcc": "4112",
+            "category": "transport",
+            "city": "Paris 10",
+            "country": "FR",
+            "address": "Paris 10, FR",
+            "state": "FR",
+            "logo": "https://storage.googleapis.com/revolut-prod-apps_merchant-logo/sncf.com",
+            "brandId": "63371c73-6a8b-43c2-843a-d59865fcd023",
+            "canBeBlocked": true
+        },
+        "counterpart": {
+            "amount": -8300,
+            "currency": "EUR"
+        },
+        "card": {
+            "id": "04294e2b-9279-45e2-99c4-eab525d47131",
+            "lastFour": "3622",
+            "disposable": false,
+            "credit": false,
+            "pro": false
+        },
+        "ratings": {
+            "userRating": 0
+        },
+        "eCommerce": true,
+        "cardholderPresent": false,
+        "chargebackEligible": true,
+        "localisedDescription": {
+            "key": "transaction.description.card.payment.to.merchant",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "SNCF"
+                }
+            ]
+        }
+    },
+    {
+        "id": "67d2c7c1-74da-a835-8bd4-32d261b11724",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "67d2c7c1-74da-a835-0000-32d261b11724",
+        "groupKey": "67d2c7c1-74da-a835-8bd4-32d261b11724",
+        "type": "EXCHANGE",
+        "state": "COMPLETED",
+        "startedDate": 1741866945398,
+        "updatedDate": 1741866945398,
+        "completedDate": 1741866945398,
+        "createdDate": 1741866945398,
+        "currency": "GBP",
+        "amount": -2170,
+        "amountWithCharges": -2170,
+        "fee": 0,
+        "feeBreakdownId": "TXN:67d2c7c1-74da-a835-8bd4-32d261b11724",
+        "balance": 0,
+        "description": "Exchanged to EUR",
+        "tag": "general",
+        "category": "general",
+        "account": {
+            "id": "9012a3c3-1e54-4d27-a870-bca9c11e846f",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "fromAccount": {
+            "type": "PERSONAL",
+            "pocketId": "9012a3c3-1e54-4d27-a870-bca9c11e846f"
+        },
+        "toAccount": {
+            "type": "PERSONAL",
+            "pocketId": "f986689c-c6de-4eed-9119-5d960563e32a"
+        },
+        "rate": 1.18722612870545,
+        "direction": "sell",
+        "counterpart": {
+            "amount": 2576,
+            "currency": "EUR",
+            "account": {
+                "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+                "type": "CURRENT"
+            }
+        },
+        "localisedDescription": {
+            "key": "transaction.description.arrow.custom.custom",
+            "params": [
+                {
+                    "key": "arrowSource",
+                    "value": "GBP"
+                },
+                {
+                    "key": "arrowTarget",
+                    "value": "EUR"
+                }
+            ]
+        }
+    },
+    {
+        "id": "67d2c7c1-74da-a835-8bd4-32d261b11724",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "67d2c7c1-74da-a835-0001-32d261b11724",
+        "groupKey": "67d2c7c1-74da-a835-8bd4-32d261b11724",
+        "type": "EXCHANGE",
+        "state": "COMPLETED",
+        "startedDate": 1741866945398,
+        "updatedDate": 1741866945398,
+        "completedDate": 1741866945398,
+        "createdDate": 1741866945398,
+        "currency": "EUR",
+        "amount": 2576,
+        "amountWithCharges": 2576,
+        "fee": 0,
+        "feeBreakdownId": "TXN:67d2c7c1-74da-a835-8bd4-32d261b11724",
+        "balance": 10399,
+        "description": "Exchanged from GBP",
+        "tag": "general",
+        "category": "general",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "fromAccount": {
+            "type": "PERSONAL",
+            "pocketId": "9012a3c3-1e54-4d27-a870-bca9c11e846f"
+        },
+        "toAccount": {
+            "type": "PERSONAL",
+            "pocketId": "f986689c-c6de-4eed-9119-5d960563e32a"
+        },
+        "rate": 0.84229952139816,
+        "direction": "buy",
+        "counterpart": {
+            "amount": -2170,
+            "currency": "GBP",
+            "account": {
+                "id": "9012a3c3-1e54-4d27-a870-bca9c11e846f",
+                "type": "CURRENT"
+            }
+        },
+        "localisedDescription": {
+            "key": "transaction.description.arrow.custom.custom",
+            "params": [
+                {
+                    "key": "arrowSource",
+                    "value": "GBP"
+                },
+                {
+                    "key": "arrowTarget",
+                    "value": "EUR"
+                }
+            ]
+        }
+    },
+    {
+        "id": "67cff646-75c1-a52b-b2cb-95cf1bf9d2c8",
+        "registeredIdentityId": "b851f371-6c19-4c65-852f-532690937940",
+        "legId": "67cff646-75c1-a52b-0000-95cf1bf9d2c8",
+        "groupKey": "67cff646-75c1-a52b-b2cb-95cf1bf9d2c8",
+        "type": "CARD_PAYMENT",
+        "state": "COMPLETED",
+        "startedDate": 1741682246000,
+        "updatedDate": 1741776390620,
+        "completedDate": 1741776390619,
+        "createdDate": 1741682246737,
+        "currency": "EUR",
+        "amount": -7400,
+        "amountWithCharges": -7400,
+        "fee": 0,
+        "feeBreakdownId": "TXN:67cff646-75c1-a52b-b2cb-95cf1bf9d2c8",
+        "balance": 7823,
+        "description": "Sncf-Voyageurs",
+        "tag": "travel",
+        "category": "travel",
+        "account": {
+            "id": "f986689c-c6de-4eed-9119-5d960563e32a",
+            "type": "CURRENT"
+        },
+        "suggestions": [],
+        "countryCode": "FR",
+        "splittable": true,
+        "rate": 1,
+        "merchant": {
+            "id": "0500664",
+            "merchantId": "7800a25e-8c5b-4f2c-94e0-fe83b23b78a8",
+            "scheme": "VISA",
+            "name": "SNCF",
+            "mcc": "4112",
+            "category": "transport",
+            "city": "Paris 10",
+            "country": "FR",
+            "address": "Paris 10, FR",
+            "state": "FR",
+            "logo": "https://storage.googleapis.com/revolut-prod-apps_merchant-logo/sncf.com",
+            "brandId": "63371c73-6a8b-43c2-843a-d59865fcd023",
+            "canBeBlocked": true
+        },
+        "counterpart": {
+            "amount": -7400,
+            "currency": "EUR"
+        },
+        "card": {
+            "id": "04294e2b-9279-45e2-99c4-eab525d47131",
+            "lastFour": "3622",
+            "disposable": false,
+            "credit": false,
+            "pro": false
+        },
+        "ratings": {
+            "userRating": 0
+        },
+        "eCommerce": true,
+        "cardholderPresent": false,
+        "chargebackEligible": true,
+        "localisedDescription": {
+            "key": "transaction.description.card.payment.to.merchant",
+            "params": [
+                {
+                    "key": "name",
+                    "value": "SNCF"
+                }
+            ]
+        }
+    }
+]

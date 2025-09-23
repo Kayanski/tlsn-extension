@@ -22,6 +22,7 @@ import {
 import { getPluginByUrl, getPluginConfigByUrl } from '../Background/db';
 import { SidePanelActionTypes } from './types';
 import { fetchP2PState, useClientId } from '../../reducers/p2p';
+import TransactionSidePanel from './SidePanelTransactionList';
 
 export default function SidePanel(): ReactElement {
   const [config, setConfig] = useState<PluginConfig | null>(null);
@@ -80,12 +81,12 @@ export default function SidePanel(): ReactElement {
         }
       }
     });
-   document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') {
-          browser.runtime.sendMessage({
-                type: SidePanelActionTypes.panel_closing,
-          });
-        }
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        browser.runtime.sendMessage({
+          type: SidePanelActionTypes.panel_closing,
+        });
+      }
     });
   }, []);
 
@@ -112,6 +113,9 @@ export default function SidePanel(): ReactElement {
           presetParameterValues={params}
         />
       )}
+      <TransactionSidePanel platformName='Revolut' onVerifyTransaction={(id) => {
+        console.log("Verifying transaction", id);
+      }} />
     </div>
   );
 }

@@ -579,10 +579,11 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
 
         const transcript: { recv: number[]; sent: number[] } = data.transcript;
 
-        const { body: recvBody } = parseHttpMessage(
+        const { body: recvBody, info } = parseHttpMessage(
           Buffer.from(transcript.recv),
           'response',
-        );
+        )
+        console.log("body", recvBody.map(buffer => buffer.toString('utf8')), Buffer.from(transcript.sent).toString('utf8'), info)
 
         if (getSecretResponse) {
           secretResps = await getSecretResponseFn(
@@ -1096,8 +1097,8 @@ async function handleRunPluginByURLRequest(request: BackgroundAction) {
 
   const onSidePanelClosing = async (req: any) => {
     if (req.type === SidePanelActionTypes.panel_closing) {
-        browser.runtime.onMessage.removeListener(onSidePanelClosing);
-        defer.reject(new Error('user rejected.'));
+      browser.runtime.onMessage.removeListener(onSidePanelClosing);
+      defer.reject(new Error('user rejected.'));
     }
 
   };

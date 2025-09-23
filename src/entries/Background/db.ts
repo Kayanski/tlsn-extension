@@ -9,6 +9,7 @@ import {
 } from './rpc';
 import mutex from './mutex';
 import { minimatch } from 'minimatch';
+import path from 'path';
 const charwise = require('charwise');
 
 export const db = new Level('./ext-db', {
@@ -44,6 +45,9 @@ const requestDb = db.sublevel<string, any>('requests', {
 
 export async function upsertRequestLog(request: UpsertRequestLog) {
   const existing = await getRequestLog(request.requestId);
+  if (request.initiator?.includes("https://app.revolut.com/api/retail/transaction/") || request.url?.includes("https://app.revolut.com/api/retail/transaction/")) {
+    console.log("adding request", existing, request, request.requestId, existing?.url, existing?.initiator, existing?.requestHeaders.find((h) => h.name == "x-device-id")?.value, request)
+  }
 
   if (existing) {
     await requestDb.put(request.requestId, {
@@ -59,6 +63,9 @@ export async function upsertRequestLog(request: UpsertRequestLog) {
         .put(request.requestId, '');
       await requestDb.sublevel(host).put(request.requestId, '');
     }
+  }
+  if (request.initiator?.includes("https://app.revolut.com/api/retail/transaction/") || request.url?.includes("https://app.revolut.com/api/retail/transaction/")) {
+    console.log("adding request", await requestDb.get(request.requestId))
   }
 }
 
@@ -358,14 +365,14 @@ export async function getPlugins(): Promise<
         hash,
         metadata: metadata
           ? {
-              ...metadata,
-              hash,
-            }
+            ...metadata,
+            hash,
+          }
           : {
-              filePath: '',
-              origin: '',
-              hash,
-            },
+            filePath: '',
+            origin: '',
+            hash,
+          },
       });
     }
   }
@@ -492,8 +499,11 @@ export async function getHeadersByHost(linkOrHost: string) {
   const isHost = !url;
   const host = isHost ? linkOrHost : url.host;
   const requests = await getRequestLogsByHost(host);
+  console.log("getting requests", linkOrHost, host, isHost)
 
   let filteredRequest: RequestLog | null = null;
+
+  console.log("requests", requests.filter((req) => req.url == "https://app.revolut.com/api/retail/transaction/68aae923-cc7a-a68f-8161-67321100eedc"));
 
   for (const request of requests) {
     if (isHost) {
@@ -508,6 +518,11 @@ export async function getHeadersByHost(linkOrHost: string) {
         (!filteredRequest || filteredRequest.updatedAt > request.updatedAt)
       ) {
         filteredRequest = request;
+        // console.log("matched request", link, request.url, request.requestHeaders.find((h) => h.name.toLowerCase() == "x-device-id")?.value)
+      }
+      if (minimatch(link, linkOrHost)) {
+        console.log(origin, pathname, request.url)
+        console.log("matched request second", link, filteredRequest?.updatedAt, request.updatedAt, request.requestHeaders.find((h) => h.name.toLowerCase() == "x-device-id")?.value)
       }
     }
   }
