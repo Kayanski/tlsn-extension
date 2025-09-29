@@ -8,6 +8,7 @@ import {
   PluginConfig,
   StepConfig,
   InputFieldConfig,
+  TransactionList,
 } from '../../utils/misc';
 import DefaultPluginIcon from '../../assets/img/default-plugin-icon.png';
 import logo from '../../assets/img/icon-128.png';
@@ -189,7 +190,7 @@ function PluginBody({
 
   // If the current step is a transaction List, we print the list instead of the usual all-steps view
   if (currentStep !== undefined && config.steps?.[currentStep]?.action && typeof config.steps?.[currentStep]?.action != "string") {
-    const action = config.steps?.[currentStep]?.action;
+    const action = config.steps?.[currentStep]?.action as TransactionList;
     return <TransactionSidePanel action={action} onVerifyTransaction={(id) => {
 
       setResponse({
