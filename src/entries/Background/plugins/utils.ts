@@ -5,10 +5,11 @@ export async function installPlugin(
   url: string,
   origin = '',
   filePath = '',
-  metadata: {[key: string]: string} = {},
+  metadata: { [key: string]: string } = {},
 ) {
   const resp = await fetch(url);
   const arrayBuffer = await resp.arrayBuffer();
+
 
   const config = await getPluginConfig(arrayBuffer);
   const hex = Buffer.from(arrayBuffer).toString('hex');

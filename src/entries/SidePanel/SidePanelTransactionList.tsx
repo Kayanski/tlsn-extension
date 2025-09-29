@@ -1,6 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Check, Clock, CreditCard, ArrowUpRight, Zap } from 'lucide-react';
-import transactions from "./transactions.json"
+import { TransactionFields, TransactionList } from '../../utils/misc';
+import { filter, get as jsonGet, last } from 'lodash';
+import { getCookiesByHost, getHeadersByHost } from '../Background/db';
+import Icon from '../../components/Icon';
+import { exec } from 'child_process';
 
 
 interface Transaction {
@@ -14,26 +18,64 @@ interface Transaction {
     description?: string;
 }
 
+interface RequestResponse {
+    url: string,
+    method: string,
+    headers: Record<string, string>
+}
+
+
 interface TransactionSidePanelProps {
     onVerifyTransaction?: (transactionId: string) => void;
-    platformName: string
+    action: TransactionList,
+    lastResponse: RequestResponse
 }
 
 const TransactionSidePanel: React.FC<TransactionSidePanelProps> = ({
     onVerifyTransaction = () => { },
-    platformName
+    action: {
+        transactionList: {
+            transactionsPath,
+            platformName,
+            variableName,
+            fields,
+            acceptableStates,
+            acceptableTypes
+        }
+    },
+    lastResponse
 }) => {
 
+    const [transactions, setTransactions] = useState<undefined | any[]>();
+
+    // We fetch the transactions using the last Response
+    useEffect(() => {
+
+        const executeRequest = async () => {
+
+            const requestResult = await fetch(lastResponse.url, { headers: lastResponse.headers, method: lastResponse.method })
+            if (!requestResult.ok) {
+                // We retry in a few seconds
+                console.warn("Retrying fetching transactions in a few seconds")
+                setTimeout(executeRequest, 2000)
+            }
+            const trs = await requestResult.json()
+            const extractedTransactions = transactionsPath ? jsonGet(trs, transactionsPath) : trs;
+            setTransactions(extractedTransactions)
+        };
+        executeRequest()
+
+    }, [lastResponse, setTransactions]);
 
     const filteredTransactions = useMemo(() => {
-        return transactions.filter(t => t.state === 'COMPLETED' && t.type == "TRANSFER" && !!t.recipient?.code)
+        return transactions?.filter(t => acceptableStates.includes(jsonGet(t, fields.state)) && acceptableTypes.includes(jsonGet(t, fields.type)) && !!jsonGet(t, fields.recipientCode))
     }, [transactions])
 
-    const formatAmount = (amount: number, currency: string) => {
+    const formatAmount = (amount: number, decimals: number, currency: string) => {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: currency,
-        }).format(Math.abs(amount) / 100);
+            currency: currency
+        }).format(Math.abs(amount) / 10 ** decimals,);
     };
 
     const formatTime = (dateNumber: number) => {
@@ -93,25 +135,18 @@ const TransactionSidePanel: React.FC<TransactionSidePanelProps> = ({
                 </div>
 
                 {
-                    filteredTransactions.map((transaction, index) => (
+                    filteredTransactions && filteredTransactions.map((transaction, index) => (
                         <div
-                            key={transaction.id}
+                            key={jsonGet(transaction, fields.id)}
                             className="group relative bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
-                            onClick={() => handleVerifyClick(transaction.id)}
+                            onClick={() => handleVerifyClick(jsonGet(transaction, fields.id))}
                         >
                             {/* Status indicator */}
                             <div className="absolute top-4 right-4">
-                                {transaction.state != 'COMPLETED' ? (
-                                    <div className="flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">
-                                        <Clock className="w-3 h-3" />
-                                        Pending
-                                    </div>
-                                ) : (
-                                    <div className="flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-medium">
-                                        <Check className="w-3 h-3" />
-                                        Completed
-                                    </div>
-                                )}
+                                <div className="flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-medium">
+                                    <Check className="w-3 h-3" />
+                                    Completed
+                                </div>
                             </div>
 
                             {/* Transaction Details */}
@@ -119,20 +154,20 @@ const TransactionSidePanel: React.FC<TransactionSidePanelProps> = ({
                                 <div className="flex items-start justify-between mb-3">
                                     <div>
                                         <h3 className="font-semibold text-gray-900 text-lg mb-1">
-                                            {transaction.recipient?.code}
+                                            {jsonGet(transaction, fields.recipientCode)}
                                         </h3>
-                                        {transaction.description && (
-                                            <p className="text-sm text-gray-600 mb-2">{transaction.description}</p>
+                                        {jsonGet(transaction, fields.description) && (
+                                            <p className="text-sm text-gray-600 mb-2">{jsonGet(transaction, fields.description)}</p>
                                         )}
                                     </div>
                                 </div>
 
                                 <div className="flex items-center justify-between gap-2">
                                     <span className="text-2xl font-bold text-gray-900">
-                                        {formatAmount(transaction.amount, transaction.currency)}
+                                        {formatAmount(jsonGet(transaction, fields.amount), fields.decimals, fields.currency.field ? jsonGet(transaction, fields.currency.field) : fields.currency.default)}
                                     </span>
                                     <span className="text-sm text-gray-500 font-medium">
-                                        {formatTime(transaction.completedDate ?? 0)}
+                                        {formatTime(jsonGet(transaction, fields.completedDate) ?? 0)}
                                     </span>
                                 </div>
                             </div>
@@ -143,7 +178,7 @@ const TransactionSidePanel: React.FC<TransactionSidePanelProps> = ({
                                     className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-xl font-medium text-sm hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2 group-hover:shadow-md"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        handleVerifyClick(transaction.id);
+                                        handleVerifyClick(jsonGet(transaction, fields.id));
                                     }}
                                 >
                                     Verify Transaction
@@ -155,6 +190,15 @@ const TransactionSidePanel: React.FC<TransactionSidePanelProps> = ({
                             <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                         </div>
                     ))
+                }
+                {
+                    !filteredTransactions && <div className="flex flex-col items-center flex-grow gap-4 border border-slate-300 p-8 mx-8 rounded bg-slate-100">
+                        <Icon
+                            className="animate-spin w-fit text-slate-500"
+                            fa="fa-solid fa-spinner"
+                            size={1}
+                        />
+                    </div>
                 }
             </div >
 

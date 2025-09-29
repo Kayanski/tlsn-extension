@@ -530,6 +530,7 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
     maxSentData: _maxSentData,
     maxRecvData: _maxRecvData,
     metadata,
+    ...extraParams
   } = request.data;
   const notaryUrl = _notaryUrl || (await getNotaryApi());
   const websocketProxyUrl = _websocketProxyUrl || (await getProxyApi());
@@ -586,9 +587,11 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
         console.log("body", recvBody.map(buffer => buffer.toString('utf8')), Buffer.from(transcript.sent).toString('utf8'), info)
 
         if (getSecretResponse) {
-          secretResps = await getSecretResponseFn(
-            ...recvBody.map((body) => body.toString('utf-8')),
-          );
+          const responseArguments = JSON.stringify({
+            body: recvBody.map((body) => body.toString('utf-8')).join(''),
+            params: extraParams
+          })
+          secretResps = await getSecretResponseFn(responseArguments);
         }
 
         const commit = {
@@ -601,9 +604,10 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
           ),
           recv: subtractRanges(
             { start: 0, end: transcript.recv.length },
-            mapStringToRange(
+            mapStringToRangePotentiallyChunked(
               secretResps,
               Buffer.from(transcript.recv).toString('utf-8'),
+              recvBody.map((body) => body.toString('utf-8'))
             ),
           ),
         };
@@ -653,8 +657,8 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
         browser.runtime.onMessage.removeListener(responseListener);
         reject(new Error('Notarization Timed Out'));
       }
-      // 3 minute timeout
-    }, 180000);
+      // 5 minute timeout
+    }, 300000);
   });
 
   try {
@@ -1128,4 +1132,71 @@ async function handleRunPluginByURLRequest(request: BackgroundAction) {
   browser.windows.onRemoved.addListener(onPopUpClose);
 
   return defer.promise;
+}
+
+
+function escapeRegex(s: string) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function findByteIdx(secret: string, text: string, parsedBody: string[]): { start: number; end: number }[] {
+  const byteIdx = indexOfString(text, secret);
+  if (byteIdx == -1) {
+    // Here we suppose that the secret goes over the chunked data boundary
+    const currentParsedChunk = parsedBody[0];
+    let count = -1;
+    let numMatch = 2;
+    while (count != 0 && count != 1 && numMatch <= secret.length && numMatch <= currentParsedChunk.length) {
+      const chars = secret.slice(0, numMatch)
+      const escapedSubstring = escapeRegex(chars);
+      // We see if there are more than 1 match of the substring 
+      count = (currentParsedChunk.match(new RegExp(`(?=${escapedSubstring})`, 'g')) || []).length;
+
+      numMatch += 1;
+    }
+    // We can't match more than once on the whole currentParsedChunk length or secret length: 
+    // - For currentParsedChunk you can't have 2 results on a string that has the same length as the string you search in
+    // - The whole secret as not found in the transcript and therefore cannot be found in any of the subsets
+    if (count != 0) {
+      const chars = secret.slice(0, numMatch)
+      // We have found a minimal match here
+      const index = currentParsedChunk.indexOf(chars);
+      const result = currentParsedChunk.substring(index);
+      const byteIdx = indexOfString(text, result);
+      const newSecret = secret.slice(result.length);
+      // Then we restart and match for the rest of the string
+      return [{
+        start: byteIdx,
+        end: byteIdx + bytesSize(result)
+      }, ...findByteIdx(newSecret, text, parsedBody.slice(1))
+
+      ]
+    } else {
+      // No results in the current parsedBody chunk, we need to process the next chunk
+      return findByteIdx(secret, text, parsedBody.slice(1))
+    }
+  }
+
+  return byteIdx > -1
+    ? [{
+      start: byteIdx,
+      end: byteIdx + bytesSize(secret),
+    }]
+    : [];
+}
+
+export function mapStringToRangePotentiallyChunked(secrets: string[], text: string, parsedBody: string[]) {
+  return secrets
+    .flatMap((secret) => {
+      return findByteIdx(secret, text, parsedBody)
+    })
+    .filter((data: any) => !!data) as { start: number; end: number }[];
+}
+
+function indexOfString(str: string, substr: string): number {
+  return Buffer.from(str).indexOf(Buffer.from(substr));
+}
+
+function bytesSize(str: string): number {
+  return Buffer.from(str).byteLength;
 }

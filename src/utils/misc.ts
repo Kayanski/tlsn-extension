@@ -331,7 +331,6 @@ export const makePlugin = async (
     const cookies: { [link: string]: { [key: string]: string } } = {};
     for (const link of config.cookies) {
       const cache = await getCookiesByHost(link);
-      console.log("fetching cookies for", link, cache)
       cookies[link] = cache;
     }
     // @ts-ignore
@@ -342,7 +341,6 @@ export const makePlugin = async (
     const headers: { [link: string]: { [key: string]: string } } = {};
     for (const link of config.headers) {
       const cache = await getHeadersByHost(link);
-      console.log("fetching headers for", link, cache)
       headers[link] = cache;
     }
     // @ts-ignore
@@ -375,14 +373,41 @@ export type InputFieldConfig = {
   options?: { value: string; label: string }[]; // Options for select type
 };
 
+export type TransactionList = {
+  transactionList: {
+    transactionsPath?: string | undefined
+    platformName: string,
+    variableName: string,
+    fields: TransactionFields,
+    acceptableStates: string[]
+    acceptableTypes: string[]
+  };
+}
+
 export type StepConfig = {
   title: string; // Text for the step's title
   description?: string; // Text for the step's description (optional)
   cta: string; // Text for the step's call-to-action button
-  action: string; // The function name that this step will execute
+  action: string | TransactionList; // The function name that this step will execute
   prover?: boolean; // Boolean indicating if this step outputs a notarization (optional)
   inputs?: InputFieldConfig[]; // Input fields for user data collection (optional)
 };
+
+export interface TransactionFields {
+  id: string,
+  state: string,
+  recipientCode: string,
+  description: string,
+  amount: string,
+  decimals: number,
+  currency: {
+    field: string | undefined,
+    default: string | undefined
+  }
+  completedDate: string,
+  type: string
+}
+
 
 export type PluginConfig = {
   title: string; // The name of the plugin
@@ -465,7 +490,12 @@ export const getPluginConfig = async (
       assert(typeof step.title === 'string' && step.title.length);
       assert(!step.description || typeof step.description);
       assert(typeof step.cta === 'string' && step.cta.length);
-      assert(typeof step.action === 'string' && step.action.length);
+      if (typeof step.action == 'string') {
+        assert(step.action.length)
+      } else {
+        assert(step.action.transactionList.platformName.length && step.action.transactionList.variableName.length)
+      }
+
       assert(!step.prover || typeof step.prover === 'boolean');
 
       if (step.inputs) {

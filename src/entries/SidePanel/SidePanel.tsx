@@ -113,9 +113,6 @@ export default function SidePanel(): ReactElement {
           presetParameterValues={params}
         />
       )}
-      <TransactionSidePanel platformName='Revolut' onVerifyTransaction={(id) => {
-        console.log("Verifying transaction", id);
-      }} />
     </div>
   );
 }
@@ -137,6 +134,7 @@ function PluginBody({
 }): ReactElement {
   const { title, description, icon, steps } = config;
   const [responses, setResponses] = useState<any[]>([]);
+  const [currentStep, setCurrentStep] = useState<undefined | number>(undefined);
   const [notarizationId, setNotarizationId] = useState('');
   const notaryRequest = useRequestHistory(notarizationId);
 
@@ -145,11 +143,16 @@ function PluginBody({
       const result = responses.concat();
       result[i] = response;
       setResponses(result);
+      setCurrentStep((currentStep) => {
+        if (!currentStep || currentStep == i) {
+          return i + 1
+        }
+      });
       if (i === steps!.length - 1 && !!response) {
         setNotarizationId(response);
       }
     },
-    [url, responses],
+    [url, responses, setCurrentStep],
   );
 
   useEffect(() => {
@@ -183,6 +186,20 @@ function PluginBody({
     }
   }, [url, notaryRequest?.status, notaryRequest?.sessionId]);
 
+
+  // If the current step is a transaction List, we print the list instead of the usual all-steps view
+  if (currentStep !== undefined && config.steps?.[currentStep]?.action && typeof config.steps?.[currentStep]?.action != "string") {
+    const action = config.steps?.[currentStep]?.action;
+    return <TransactionSidePanel action={action} onVerifyTransaction={(id) => {
+
+      setResponse({
+        ...(currentStep > 0 ? responses[currentStep - 1] : {}),
+        [action.transactionList.variableName]: id
+      }, currentStep);
+
+    }} lastResponse={currentStep > 0 ? responses[currentStep - 1] : undefined} />
+  }
+
   return (
     <div className="flex flex-col p-4">
       <div className="flex flex-row items-center gap-4">
@@ -195,8 +212,8 @@ function PluginBody({
         </div>
       </div>
       <div className="flex flex-col items-start gap-8 mt-8">
-        {steps?.map((step, i) => (
-          <StepContent
+        {steps?.map((step, i) => (<>
+          {typeof step.action == "string" && <StepContent
             key={i}
             url={url}
             config={config}
@@ -209,7 +226,7 @@ function PluginBody({
             clientId={clientId}
             parameterValues={presetParameterValues}
             {...step}
-          />
+          />}</>
         ))}
       </div>
     </div>
@@ -300,8 +317,11 @@ function StepContent(
       } else {
         stepData = { ...parameterValues, ...inputValues };
       }
-
+      if (typeof action != "string") {
+        throw "Unreachable, step shouldn't come up for a non-string action"
+      }
       const out = await plugin.call(action, JSON.stringify(stepData));
+
       const val = JSON.parse(out!.string());
       if (val && prover) {
         setNotarizationId(val);
