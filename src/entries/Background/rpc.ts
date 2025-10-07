@@ -55,7 +55,7 @@ import {
   sendPairedMessage,
 } from './ws';
 
-import { parseHttpMessage } from '../../utils/parser';
+import { DistanceAndEnd, Interval, parseHttpMessage } from '../../utils/parser';
 import { mapStringToRange, subtractRanges } from 'tlsn-js';
 import { PresentationJSON } from 'tlsn-js/build/types';
 
@@ -215,7 +215,7 @@ export type RequestHistory = {
     notaryKey?: string;
   };
   secretHeaders?: string[];
-  secretResps?: string[];
+  secretResps?: Interval[];
   cid?: string;
   errorMessage?: string;
   metadata?: {
@@ -537,7 +537,8 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
   const maxSentData = _maxSentData || (await getMaxSent());
   const maxRecvData = _maxRecvData || (await getMaxRecv());
 
-  let secretResps: string[] = [];
+  let secretResps: Interval[] = [];
+  let tcpBytesSecrets: Interval[] = [];
 
   const { id } = await addNotaryRequest(now, {
     url,
@@ -580,11 +581,13 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
 
         const transcript: { recv: number[]; sent: number[] } = data.transcript;
 
-        const { body: recvBody, info } = parseHttpMessage(
+        const { body: recvBody, info, bodyOffsets } = parseHttpMessage(
           Buffer.from(transcript.recv),
           'response',
         )
         console.log("body", recvBody.map(buffer => buffer.toString('utf8')), Buffer.from(transcript.sent).toString('utf8'), info)
+
+        console.log("recv transctipt", transcript.recv)
 
         if (getSecretResponse) {
           const responseArguments = JSON.stringify({
@@ -592,6 +595,9 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
             params: extraParams
           })
           secretResps = await getSecretResponseFn(responseArguments);
+          console.log(secretResps)
+          tcpBytesSecrets = createBytesSecrets(Buffer.from(transcript.recv), secretResps, bodyOffsets)
+          console.log(tcpBytesSecrets)
         }
 
         const commit = {
@@ -604,11 +610,7 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
           ),
           recv: subtractRanges(
             { start: 0, end: transcript.recv.length },
-            mapStringToRangePotentiallyChunked(
-              secretResps,
-              Buffer.from(transcript.recv).toString('utf-8'),
-              recvBody.map((body) => body.toString('utf-8'))
-            ),
+            tcpBytesSecrets,
           ),
         };
 
@@ -1134,69 +1136,77 @@ async function handleRunPluginByURLRequest(request: BackgroundAction) {
   return defer.promise;
 }
 
+function findTcpOffset(secret: Interval, distancesAndEnd: DistanceAndEnd[]): Interval[] {
 
-function escapeRegex(s: string) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function findByteIdx(secret: string, text: string, parsedBody: string[]): { start: number; end: number }[] {
-  const byteIdx = indexOfString(text, secret);
-  if (byteIdx == -1) {
-    // Here we suppose that the secret goes over the chunked data boundary
-    const currentParsedChunk = parsedBody[0];
-    let count = -1;
-    let numMatch = 2;
-    while (count != 0 && count != 1 && numMatch <= secret.length && numMatch <= currentParsedChunk.length) {
-      const chars = secret.slice(0, numMatch)
-      const escapedSubstring = escapeRegex(chars);
-      // We see if there are more than 1 match of the substring 
-      count = (currentParsedChunk.match(new RegExp(`(?=${escapedSubstring})`, 'g')) || []).length;
-
-      numMatch += 1;
-    }
-    // We can't match more than once on the whole currentParsedChunk length or secret length: 
-    // - For currentParsedChunk you can't have 2 results on a string that has the same length as the string you search in
-    // - The whole secret as not found in the transcript and therefore cannot be found in any of the subsets
-    if (count != 0) {
-      const chars = secret.slice(0, numMatch)
-      // We have found a minimal match here
-      const index = currentParsedChunk.indexOf(chars);
-      const result = currentParsedChunk.substring(index);
-      const byteIdx = indexOfString(text, result);
-      const newSecret = secret.slice(result.length);
-      // Then we restart and match for the rest of the string
-      return [{
-        start: byteIdx,
-        end: byteIdx + bytesSize(result)
-      }, ...findByteIdx(newSecret, text, parsedBody.slice(1))
-
-      ]
+  // We first need to apply the first body header length
+  const secretWithHeader = { start: secret.start + distancesAndEnd[0].distance, end: secret.end + distancesAndEnd[0].distance };
+  // If the secret starts in the current chunk
+  if (secretWithHeader.start < distancesAndEnd[0].end) {
+    // If the secret also ends in the current chunk
+    if (secretWithHeader.end <= distancesAndEnd[0].end) {
+      // We are safe to return the secret with the current offset
+      return [secretWithHeader]
     } else {
-      // No results in the current parsedBody chunk, we need to process the next chunk
-      return findByteIdx(secret, text, parsedBody.slice(1))
+      // This means that the secret goes over the chunk boundary
+      return [
+        {
+          start: secretWithHeader.start,
+          end: distancesAndEnd[0].end
+        },
+        ...findTcpOffset({
+          start: distancesAndEnd[0].end,
+          end: secretWithHeader.end
+        }, distancesAndEnd.slice(1))
+      ]
     }
+  } else {
+    return findTcpOffset({
+      start: distancesAndEnd[0].end,
+      end: secretWithHeader.end
+    }, distancesAndEnd.slice(1))
   }
-
-  return byteIdx > -1
-    ? [{
-      start: byteIdx,
-      end: byteIdx + bytesSize(secret),
-    }]
-    : [];
 }
 
-export function mapStringToRangePotentiallyChunked(secrets: string[], text: string, parsedBody: string[]) {
+export function mapSecretsToTCPOffsets(secrets: Interval[], bodyOffsets: Interval[]): Interval[] {
+  const distancesAndEnd = bodyOffsets.map((offset, index) => {
+    const distance = index ? bodyOffsets[index].start - bodyOffsets[index - 1].end : bodyOffsets[index].start
+    return {
+      distance,
+      end: offset.end
+    };
+  });
+
   return secrets
     .flatMap((secret) => {
-      return findByteIdx(secret, text, parsedBody)
+      return findTcpOffset(secret, distancesAndEnd)
     })
     .filter((data: any) => !!data) as { start: number; end: number }[];
 }
 
-function indexOfString(str: string, substr: string): number {
-  return Buffer.from(str).indexOf(Buffer.from(substr));
+
+function stringOffsetToByteOffset(str: string, charOffset: number) {
+  // Use TextEncoder to get the actual byte representation
+  const encoder = new TextEncoder();
+  const substring = str.slice(0, charOffset);
+  const bytes = encoder.encode(substring);
+  return bytes.length;
 }
 
-function bytesSize(str: string): number {
-  return Buffer.from(str).byteLength;
+export function mapUTF8OffsetsToByteOffsets(offsets: { start: number; end: number }[], text: string): { start: number; end: number }[] {
+  return offsets.map(({ start, end }) => ({
+    start: stringOffsetToByteOffset(text, start),
+    end: stringOffsetToByteOffset(text, end)
+  }))
+}
+export function createBytesSecrets(transcript_recv: Buffer, secrets: Interval[], bodyOffsets: Interval[]) {
+
+  // We stay in utf-8
+  const tcpSecrets = mapSecretsToTCPOffsets(secrets, bodyOffsets,)
+
+  // Now we transfer to bytes
+  const tcpBytesSecrets = mapUTF8OffsetsToByteOffsets(
+    tcpSecrets,
+    transcript_recv.toString('utf-8')
+  )
+  return tcpBytesSecrets
 }
