@@ -64,7 +64,7 @@ export function RunPluginByUrlApproval(): ReactElement {
 
       const { promise, resolve } = deferredPromise();
 
-      const listener = async (request: any) => {
+      const listener = (request: any) => {
         if (request.type === SidePanelActionTypes.panel_opened) {
           browser.runtime.onMessage.removeListener(listener);
           resolve();

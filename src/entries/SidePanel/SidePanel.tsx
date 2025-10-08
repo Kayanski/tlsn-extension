@@ -42,45 +42,47 @@ export default function SidePanel(): ReactElement {
   }, []);
 
   useEffect(() => {
-    browser.runtime.onMessage.addListener(async (request) => {
-      const { type, data } = request;
+    browser.runtime.onMessage.addListener((request) => {
+      return (async () => {
+        const { type, data } = request;
 
-      switch (type) {
-        case SidePanelActionTypes.execute_plugin_request: {
-          const pluginIdentifier = data.pluginUrl || data.pluginHash;
-          setConfig(await getPluginConfigByUrl(pluginIdentifier));
-          setUrl(pluginIdentifier);
-          setParams(data.pluginParams);
-          setStarted(true);
-          break;
-        }
-        case SidePanelActionTypes.run_p2p_plugin_request: {
-          const { pluginHash, plugin } = data;
-          const config =
-            (await getPluginConfigByUrl(pluginHash)) ||
-            (await getPluginConfig(hexToArrayBuffer(plugin)));
+        switch (type) {
+          case SidePanelActionTypes.execute_plugin_request: {
+            const pluginIdentifier = data.pluginUrl || data.pluginHash;
+            setConfig(await getPluginConfigByUrl(pluginIdentifier));
+            setUrl(pluginIdentifier);
+            setParams(data.pluginParams);
+            setStarted(true);
+            break;
+          }
+          case SidePanelActionTypes.run_p2p_plugin_request: {
+            const { pluginHash, plugin } = data;
+            const config =
+              (await getPluginConfigByUrl(pluginHash)) ||
+              (await getPluginConfig(hexToArrayBuffer(plugin)));
 
-          setUrl(pluginHash);
-          setHex(plugin);
-          setP2P(true);
-          setConfig(config);
-          break;
+            setUrl(pluginHash);
+            setHex(plugin);
+            setP2P(true);
+            setConfig(config);
+            break;
+          }
+          case SidePanelActionTypes.start_p2p_plugin: {
+            setStarted(true);
+            break;
+          }
+          case SidePanelActionTypes.is_panel_open: {
+            return { isOpen: true };
+          }
+          case SidePanelActionTypes.reset_panel: {
+            setConfig(null);
+            setUrl('');
+            setHex('');
+            setStarted(false);
+            break;
+          }
         }
-        case SidePanelActionTypes.start_p2p_plugin: {
-          setStarted(true);
-          break;
-        }
-        case SidePanelActionTypes.is_panel_open: {
-          return { isOpen: true };
-        }
-        case SidePanelActionTypes.reset_panel: {
-          setConfig(null);
-          setUrl('');
-          setHex('');
-          setStarted(false);
-          break;
-        }
-      }
+      })();
     });
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {

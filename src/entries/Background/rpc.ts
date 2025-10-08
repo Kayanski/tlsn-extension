@@ -1005,7 +1005,7 @@ async function handleNotarizeRequest(request: BackgroundAction) {
   const id = charwise.encode(now).toString('hex');
   let isUserClose = true;
 
-  const onNotarizationResponse = async (req: any) => {
+  const onNotarizationResponse = (req: any) => {
     if (req.type !== OffscreenActionTypes.notarization_response) return;
     if (req.data.id !== id) return;
 
@@ -1015,41 +1015,46 @@ async function handleNotarizeRequest(request: BackgroundAction) {
     browser.runtime.onMessage.removeListener(onNotarizationResponse);
   };
 
-  const onMessage = async (req: BackgroundAction) => {
-    if (req.type === BackgroundActiontype.notarize_response) {
-      if (req.data) {
-        try {
-          const { secretHeaders, secretResps } = req.data;
-          await addNotaryRequest(now, req.data);
-          await setNotaryRequestStatus(id, 'pending');
+  const onMessageAsync = async (req: BackgroundAction) => {
+    if (req.data) {
+      try {
+        const { secretHeaders, secretResps } = req.data;
+        await addNotaryRequest(now, req.data);
+        await setNotaryRequestStatus(id, 'pending');
 
-          browser.runtime.onMessage.addListener(onNotarizationResponse);
-          browser.runtime.sendMessage({
-            type: OffscreenActionTypes.notarization_request,
-            data: {
-              id,
-              url,
-              method,
-              headers,
-              body,
-              maxSentData,
-              maxRecvData,
-              notaryUrl,
-              websocketProxyUrl,
-              secretHeaders,
-              secretResps,
-            },
-          });
-        } catch (e) {
-          defer.reject(e);
-        }
-      } else {
-        defer.reject(new Error('user rejected.'));
+        browser.runtime.onMessage.addListener(onNotarizationResponse);
+        browser.runtime.sendMessage({
+          type: OffscreenActionTypes.notarization_request,
+          data: {
+            id,
+            url,
+            method,
+            headers,
+            body,
+            maxSentData,
+            maxRecvData,
+            notaryUrl,
+            websocketProxyUrl,
+            secretHeaders,
+            secretResps,
+          },
+        });
+      } catch (e) {
+        defer.reject(e);
       }
+    } else {
+      defer.reject(new Error('user rejected.'));
+    }
 
-      browser.runtime.onMessage.removeListener(onMessage);
-      isUserClose = false;
-      browser.tabs.remove(tab.id!);
+    browser.runtime.onMessage.removeListener(onMessage);
+    isUserClose = false;
+    browser.tabs.remove(tab.id!);
+
+  }
+
+  const onMessage = (req: BackgroundAction) => {
+    if (req.type === BackgroundActiontype.notarize_response) {
+      return onMessageAsync(req)
     }
   };
 
@@ -1090,7 +1095,7 @@ async function handleRunPluginByURLRequest(request: BackgroundAction) {
     position.top,
   );
 
-  const onPluginRequest = async (req: any) => {
+  const onPluginRequest = (req: any) => {
     if (req.type !== SidePanelActionTypes.execute_plugin_response) return;
     console.log('onPluginRequest end', req.data);
     if (req.data.url !== url) return;
@@ -1101,14 +1106,14 @@ async function handleRunPluginByURLRequest(request: BackgroundAction) {
     browser.runtime.onMessage.removeListener(onPluginRequest);
   };
 
-  const onSidePanelClosing = async (req: any) => {
+  const onSidePanelClosing = (req: any) => {
     if (req.type === SidePanelActionTypes.panel_closing) {
       browser.runtime.onMessage.removeListener(onSidePanelClosing);
       defer.reject(new Error('user rejected.'));
     }
   };
 
-  const onMessage = async (req: BackgroundAction) => {
+  const onMessage = (req: BackgroundAction) => {
     if (req.type === BackgroundActiontype.run_plugin_by_url_response) {
       if (req.data) {
         browser.runtime.onMessage.addListener(onPluginRequest);

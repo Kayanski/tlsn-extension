@@ -40,7 +40,7 @@ export const openSidePanel = async () => {
       currentWindow: true,
     });
 
-    const listener = async (request: any) => {
+    const listener = (request: any) => {
       if (request.type === SidePanelActionTypes.panel_opened) {
         browser.runtime.onMessage.removeListener(listener);
         resolve();
@@ -60,7 +60,7 @@ export const openSidePanel = async () => {
 export const waitForEvent = async (event: string) => {
   const { promise, resolve } = deferredPromise();
 
-  const listener = async (request: any) => {
+  const listener = (request: any) => {
     if (request.type === event) {
       devlog('received event:', event);
       browser.runtime.onMessage.removeListener(listener);
