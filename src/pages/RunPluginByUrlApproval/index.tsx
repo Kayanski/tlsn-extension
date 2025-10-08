@@ -1,7 +1,7 @@
 import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import Icon from '../../components/Icon';
 import { useSearchParams } from 'react-router-dom';
-import { type PluginConfig, PluginMetadata, urlify } from '../../utils/misc';
+import { type PluginConfig, PluginMetadata, sha256, urlify } from '../../utils/misc';
 import browser from 'webextension-polyfill';
 import { BackgroundActiontype } from '../../entries/Background/rpc';
 import { BaseApproval } from '../BaseApproval';
@@ -25,16 +25,18 @@ export function RunPluginByUrlApproval(): ReactElement {
   const [error, showError] = useState('');
   const [metadata, setPluginMetadata] = useState<PluginMetadata | null>(null);
   const [pluginContent, setPluginContent] = useState<PluginConfig | null>(null);
-
   useEffect(() => {
     if (!url) return;
     (async () => {
       try {
-        const hex = await getPluginByUrl(url);
+        // Here we supposed that's a new plugin, so we need to install it in any cases
+        await installPlugin(url);
+        // const hex = await getPluginByUrl(url);
 
-        if (!hex) {
-          await installPlugin(url);
-        }
+        // if (!hex) {
+        //   await installPlugin(url);
+        // } 
+
 
         const config = await getPluginConfigByUrl(url);
         const metadata = await getPluginMetadataByUrl(url);

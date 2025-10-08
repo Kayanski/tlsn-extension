@@ -300,6 +300,16 @@ export async function addPlugin(
   return hash;
 }
 
+export async function addPluginForce(
+  hex: string,
+  url: string,
+): Promise<string | null> {
+  const hash = await sha256(hex);
+
+  await pluginDb.put(url, hex);
+  return hash;
+}
+
 export async function removePlugin(url: string): Promise<string | null> {
   const existing = await pluginDb.get(url);
 

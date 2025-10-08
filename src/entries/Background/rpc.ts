@@ -1092,7 +1092,7 @@ async function handleRunPluginByURLRequest(request: BackgroundAction) {
 
   const onPluginRequest = async (req: any) => {
     if (req.type !== SidePanelActionTypes.execute_plugin_response) return;
-    console.log('onPluginRequest', req.data);
+    console.log('onPluginRequest end', req.data);
     if (req.data.url !== url) return;
     if (req.data.error) defer.reject(req.data.error);
     if (req.data.proof) defer.resolve(req.data.proof);
