@@ -55,7 +55,7 @@ import {
   sendPairedMessage,
 } from './ws';
 
-import { parseHttpMessage } from '../../utils/parser';
+import { DistanceAndEnd, Interval, parseHttpMessage } from '../../utils/parser';
 import { mapStringToRange, subtractRanges } from 'tlsn-js';
 import { PresentationJSON } from 'tlsn-js/build/types';
 
@@ -215,7 +215,7 @@ export type RequestHistory = {
     notaryKey?: string;
   };
   secretHeaders?: string[];
-  secretResps?: string[];
+  secretResps?: Interval[];
   cid?: string;
   errorMessage?: string;
   metadata?: {
@@ -530,13 +530,15 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
     maxSentData: _maxSentData,
     maxRecvData: _maxRecvData,
     metadata,
+    ...extraParams
   } = request.data;
   const notaryUrl = _notaryUrl || (await getNotaryApi());
   const websocketProxyUrl = _websocketProxyUrl || (await getProxyApi());
   const maxSentData = _maxSentData || (await getMaxSent());
   const maxRecvData = _maxRecvData || (await getMaxRecv());
 
-  let secretResps: string[] = [];
+  let secretResps: Interval[] = [];
+  let tcpBytesSecrets: Interval[] = [];
 
   const { id } = await addNotaryRequest(now, {
     url,
@@ -579,15 +581,23 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
 
         const transcript: { recv: number[]; sent: number[] } = data.transcript;
 
-        const { body: recvBody } = parseHttpMessage(
+        const { body: recvBody, info, bodyOffsets } = parseHttpMessage(
           Buffer.from(transcript.recv),
           'response',
-        );
+        )
+        console.log("body", recvBody.map(buffer => buffer.toString('utf8')), Buffer.from(transcript.sent).toString('utf8'), info)
+
+        console.log("recv transctipt", transcript.recv)
 
         if (getSecretResponse) {
-          secretResps = await getSecretResponseFn(
-            ...recvBody.map((body) => body.toString('utf-8')),
-          );
+          const responseArguments = JSON.stringify({
+            body: recvBody.map((body) => body.toString('utf-8')).join(''),
+            params: extraParams
+          })
+          secretResps = await getSecretResponseFn(responseArguments);
+          console.log(secretResps)
+          tcpBytesSecrets = createBytesSecrets(Buffer.from(transcript.recv), secretResps, bodyOffsets)
+          console.log(tcpBytesSecrets)
         }
 
         const commit = {
@@ -600,10 +610,7 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
           ),
           recv: subtractRanges(
             { start: 0, end: transcript.recv.length },
-            mapStringToRange(
-              secretResps,
-              Buffer.from(transcript.recv).toString('utf-8'),
-            ),
+            tcpBytesSecrets,
           ),
         };
 
@@ -652,8 +659,8 @@ async function runPluginProver(request: BackgroundAction, now = Date.now()) {
         browser.runtime.onMessage.removeListener(responseListener);
         reject(new Error('Notarization Timed Out'));
       }
-      // 3 minute timeout
-    }, 180000);
+      // 5 minute timeout
+    }, 300000);
   });
 
   try {
@@ -998,7 +1005,7 @@ async function handleNotarizeRequest(request: BackgroundAction) {
   const id = charwise.encode(now).toString('hex');
   let isUserClose = true;
 
-  const onNotarizationResponse = async (req: any) => {
+  const onNotarizationResponse = (req: any) => {
     if (req.type !== OffscreenActionTypes.notarization_response) return;
     if (req.data.id !== id) return;
 
@@ -1008,41 +1015,46 @@ async function handleNotarizeRequest(request: BackgroundAction) {
     browser.runtime.onMessage.removeListener(onNotarizationResponse);
   };
 
-  const onMessage = async (req: BackgroundAction) => {
-    if (req.type === BackgroundActiontype.notarize_response) {
-      if (req.data) {
-        try {
-          const { secretHeaders, secretResps } = req.data;
-          await addNotaryRequest(now, req.data);
-          await setNotaryRequestStatus(id, 'pending');
+  const onMessageAsync = async (req: BackgroundAction) => {
+    if (req.data) {
+      try {
+        const { secretHeaders, secretResps } = req.data;
+        await addNotaryRequest(now, req.data);
+        await setNotaryRequestStatus(id, 'pending');
 
-          browser.runtime.onMessage.addListener(onNotarizationResponse);
-          browser.runtime.sendMessage({
-            type: OffscreenActionTypes.notarization_request,
-            data: {
-              id,
-              url,
-              method,
-              headers,
-              body,
-              maxSentData,
-              maxRecvData,
-              notaryUrl,
-              websocketProxyUrl,
-              secretHeaders,
-              secretResps,
-            },
-          });
-        } catch (e) {
-          defer.reject(e);
-        }
-      } else {
-        defer.reject(new Error('user rejected.'));
+        browser.runtime.onMessage.addListener(onNotarizationResponse);
+        browser.runtime.sendMessage({
+          type: OffscreenActionTypes.notarization_request,
+          data: {
+            id,
+            url,
+            method,
+            headers,
+            body,
+            maxSentData,
+            maxRecvData,
+            notaryUrl,
+            websocketProxyUrl,
+            secretHeaders,
+            secretResps,
+          },
+        });
+      } catch (e) {
+        defer.reject(e);
       }
+    } else {
+      defer.reject(new Error('user rejected.'));
+    }
 
-      browser.runtime.onMessage.removeListener(onMessage);
-      isUserClose = false;
-      browser.tabs.remove(tab.id!);
+    browser.runtime.onMessage.removeListener(onMessage);
+    isUserClose = false;
+    browser.tabs.remove(tab.id!);
+
+  }
+
+  const onMessage = (req: BackgroundAction) => {
+    if (req.type === BackgroundActiontype.notarize_response) {
+      return onMessageAsync(req)
     }
   };
 
@@ -1083,9 +1095,9 @@ async function handleRunPluginByURLRequest(request: BackgroundAction) {
     position.top,
   );
 
-  const onPluginRequest = async (req: any) => {
+  const onPluginRequest = (req: any) => {
     if (req.type !== SidePanelActionTypes.execute_plugin_response) return;
-    console.log('onPluginRequest', req.data);
+    console.log('onPluginRequest end', req.data);
     if (req.data.url !== url) return;
     if (req.data.error) defer.reject(req.data.error);
     if (req.data.proof) defer.resolve(req.data.proof);
@@ -1094,7 +1106,14 @@ async function handleRunPluginByURLRequest(request: BackgroundAction) {
     browser.runtime.onMessage.removeListener(onPluginRequest);
   };
 
-  const onMessage = async (req: BackgroundAction) => {
+  const onSidePanelClosing = (req: any) => {
+    if (req.type === SidePanelActionTypes.panel_closing) {
+      browser.runtime.onMessage.removeListener(onSidePanelClosing);
+      defer.reject(new Error('user rejected.'));
+    }
+  };
+
+  const onMessage = (req: BackgroundAction) => {
     if (req.type === BackgroundActiontype.run_plugin_by_url_response) {
       if (req.data) {
         browser.runtime.onMessage.addListener(onPluginRequest);
@@ -1116,7 +1135,83 @@ async function handleRunPluginByURLRequest(request: BackgroundAction) {
   };
 
   browser.runtime.onMessage.addListener(onMessage);
+  browser.runtime.onMessage.addListener(onSidePanelClosing);
   browser.windows.onRemoved.addListener(onPopUpClose);
 
   return defer.promise;
+}
+
+function findTcpOffset(secret: Interval, distancesAndEnd: DistanceAndEnd[]): Interval[] {
+
+  // We first need to apply the first body header length
+  const secretWithHeader = { start: secret.start + distancesAndEnd[0].distance, end: secret.end + distancesAndEnd[0].distance };
+  // If the secret starts in the current chunk
+  if (secretWithHeader.start < distancesAndEnd[0].end) {
+    // If the secret also ends in the current chunk
+    if (secretWithHeader.end <= distancesAndEnd[0].end) {
+      // We are safe to return the secret with the current offset
+      return [secretWithHeader]
+    } else {
+      // This means that the secret goes over the chunk boundary
+      return [
+        {
+          start: secretWithHeader.start,
+          end: distancesAndEnd[0].end
+        },
+        ...findTcpOffset({
+          start: distancesAndEnd[0].end,
+          end: secretWithHeader.end
+        }, distancesAndEnd.slice(1))
+      ]
+    }
+  } else {
+    return findTcpOffset({
+      start: distancesAndEnd[0].end,
+      end: secretWithHeader.end
+    }, distancesAndEnd.slice(1))
+  }
+}
+
+export function mapSecretsToTCPOffsets(secrets: Interval[], bodyOffsets: Interval[]): Interval[] {
+  const distancesAndEnd = bodyOffsets.map((offset, index) => {
+    const distance = index ? bodyOffsets[index].start - bodyOffsets[index - 1].end : bodyOffsets[index].start
+    return {
+      distance,
+      end: offset.end
+    };
+  });
+
+  return secrets
+    .flatMap((secret) => {
+      return findTcpOffset(secret, distancesAndEnd)
+    })
+    .filter((data: any) => !!data) as { start: number; end: number }[];
+}
+
+
+function stringOffsetToByteOffset(str: string, charOffset: number) {
+  // Use TextEncoder to get the actual byte representation
+  const encoder = new TextEncoder();
+  const substring = str.slice(0, charOffset);
+  const bytes = encoder.encode(substring);
+  return bytes.length;
+}
+
+export function mapUTF8OffsetsToByteOffsets(offsets: { start: number; end: number }[], text: string): { start: number; end: number }[] {
+  return offsets.map(({ start, end }) => ({
+    start: stringOffsetToByteOffset(text, start),
+    end: stringOffsetToByteOffset(text, end)
+  }))
+}
+export function createBytesSecrets(transcript_recv: Buffer, secrets: Interval[], bodyOffsets: Interval[]) {
+
+  // We stay in utf-8
+  const tcpSecrets = mapSecretsToTCPOffsets(secrets, bodyOffsets,)
+
+  // Now we transfer to bytes
+  const tcpBytesSecrets = mapUTF8OffsetsToByteOffsets(
+    tcpSecrets,
+    transcript_recv.toString('utf-8')
+  )
+  return tcpBytesSecrets
 }

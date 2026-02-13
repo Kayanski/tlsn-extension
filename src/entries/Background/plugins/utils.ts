@@ -1,18 +1,18 @@
-import { addPlugin, addPluginConfig, addPluginMetadata } from '../db';
+import { addPlugin, addPluginConfig, addPluginForce, addPluginMetadata } from '../db';
 import { getPluginConfig } from '../../../utils/misc';
 
 export async function installPlugin(
   url: string,
   origin = '',
   filePath = '',
-  metadata: {[key: string]: string} = {},
+  metadata: { [key: string]: string } = {},
 ) {
   const resp = await fetch(url);
   const arrayBuffer = await resp.arrayBuffer();
 
   const config = await getPluginConfig(arrayBuffer);
   const hex = Buffer.from(arrayBuffer).toString('hex');
-  const hash = await addPlugin(hex, url);
+  const hash = await addPluginForce(hex, url);
 
   await addPluginConfig(url, config);
   await addPluginMetadata(url, {

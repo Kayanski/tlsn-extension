@@ -9,6 +9,7 @@ import {
 } from './rpc';
 import mutex from './mutex';
 import { minimatch } from 'minimatch';
+import path from 'path';
 const charwise = require('charwise');
 
 export const db = new Level('./ext-db', {
@@ -73,9 +74,19 @@ export async function removeRequestLog(requestId: string) {
   if (existing) {
     await requestDb.del(requestId);
     await requestDb.sublevel(existing.tabId.toString()).del(requestId);
+
+    // Removing requestId for asset url
     const host = urlify(existing.url)?.host;
     if (host) {
       await requestDb.sublevel(host).del(requestId);
+    }
+
+    // Removing requestId for initiator url
+    if (existing.initiator) {
+      const host = urlify(existing.initiator)?.host;
+      if (host) {
+        await requestDb.sublevel(host).del(requestId);
+      }
     }
   }
 }
@@ -289,6 +300,16 @@ export async function addPlugin(
   return hash;
 }
 
+export async function addPluginForce(
+  hex: string,
+  url: string,
+): Promise<string | null> {
+  const hash = await sha256(hex);
+
+  await pluginDb.put(url, hex);
+  return hash;
+}
+
 export async function removePlugin(url: string): Promise<string | null> {
   const existing = await pluginDb.get(url);
 
@@ -348,14 +369,14 @@ export async function getPlugins(): Promise<
         hash,
         metadata: metadata
           ? {
-              ...metadata,
-              hash,
-            }
+            ...metadata,
+            hash,
+          }
           : {
-              filePath: '',
-              origin: '',
-              hash,
-            },
+            filePath: '',
+            origin: '',
+            hash,
+          },
       });
     }
   }
@@ -422,13 +443,14 @@ export async function getCookiesByHost(linkOrHost: string) {
   const url = urlify(linkOrHost);
   const isHost = !url;
   const host = isHost ? linkOrHost : url.host;
+  console.log("fetching cookies for ", isHost, linkOrHost, host, url);
   const requests = await getRequestLogsByHost(host);
 
   let filteredRequest: RequestLog | null = null;
 
   for (const request of requests) {
     if (isHost) {
-      if (!filteredRequest || filteredRequest.updatedAt > request.updatedAt) {
+      if (!filteredRequest || filteredRequest.updatedAt < request.updatedAt) {
         filteredRequest = request;
       }
     } else {
@@ -436,7 +458,7 @@ export async function getCookiesByHost(linkOrHost: string) {
       const link = [origin, pathname].join('');
       if (
         minimatch(link, linkOrHost) &&
-        (!filteredRequest || filteredRequest.updatedAt > request.updatedAt)
+        (!filteredRequest || filteredRequest.updatedAt < request.updatedAt)
       ) {
         filteredRequest = request;
       }
@@ -456,7 +478,6 @@ export async function getCookiesByHost(linkOrHost: string) {
       });
     }
   }
-
   return ret;
 }
 
@@ -481,13 +502,14 @@ export async function getHeadersByHost(linkOrHost: string) {
   const url = urlify(linkOrHost);
   const isHost = !url;
   const host = isHost ? linkOrHost : url.host;
+  console.log("fetching headers for ", isHost, linkOrHost, host, url);
   const requests = await getRequestLogsByHost(host);
 
   let filteredRequest: RequestLog | null = null;
 
   for (const request of requests) {
     if (isHost) {
-      if (!filteredRequest || filteredRequest.updatedAt > request.updatedAt) {
+      if (!filteredRequest || filteredRequest.updatedAt < request.updatedAt) {
         filteredRequest = request;
       }
     } else {
@@ -495,7 +517,7 @@ export async function getHeadersByHost(linkOrHost: string) {
       const link = [origin, pathname].join('');
       if (
         minimatch(link, linkOrHost) &&
-        (!filteredRequest || filteredRequest.updatedAt > request.updatedAt)
+        (!filteredRequest || filteredRequest.updatedAt < request.updatedAt)
       ) {
         filteredRequest = request;
       }

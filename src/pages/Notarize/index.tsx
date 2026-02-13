@@ -49,7 +49,6 @@ export default function Notarize(): ReactElement {
     headers['Connection'] = 'close';
 
     dispatch(
-      // @ts-ignore
       notarizeRequest({
         url: req.url,
         method: req.method,
@@ -60,6 +59,7 @@ export default function Notarize(): ReactElement {
         notaryUrl,
         websocketProxyUrl,
         secretHeaders,
+        // @ts-ignore
         secretResps,
       }),
     );
@@ -189,8 +189,8 @@ export function RevealHeaderStep(props: {
                   {revealed[h.name]
                     ? h.value
                     : Array(h.value?.length || 0)
-                        .fill('*')
-                        .join('')}
+                      .fill('*')
+                      .join('')}
                 </td>
               </tr>
             ))}
@@ -269,8 +269,8 @@ export function RevealHeaderTable(props: {
               {revealed[h.name]
                 ? h.value
                 : Array(h.value?.length || 0)
-                    .fill('*')
-                    .join('')}
+                  .fill('*')
+                  .join('')}
             </td>
           </tr>
         ))}
